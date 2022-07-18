@@ -18,10 +18,11 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: paths.dist, //not sure what this does wrt HtmlWebpackPlugin
+    static: paths.dist, //not sure what this does wrt HtmlWebpackPlugin
+    /*contentBase: paths.dist,*/
     compress: true,
     port: 8080,
-    stats: 'errors-only',
+    /*stats: 'errors-only',*/
     open: true
   },
 

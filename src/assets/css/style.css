@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+
+#app {
+
+}
+
+#banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+#title {
+  font-family: 'GFS Neohellenic', sans-serif;
+  font-size: 6vh;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  padding-left: 3vh;
+}
+
+#subtitle {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+  font-size: 2vh;
+  padding: 1vh;
+}
+
+#viewpane {
+  position: fixed;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  height: 90vh; /* scroll box exactly window height */
+  scrollbar-width: none; /* hides scrollbar in Firefox */
+  -ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
+}
+
+#viewpane::-webkit-scrollbar { /* hides scrollbar in Safari + Chrome */
+    width: 0;
+    height: 0;
+}
+
+table {
+  empty-cells: show;
+  font-family: 'Raleway', sans-serif;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+#colhead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+#tabular {
+
+}
+
+#tablebox {
+  overflow: hidden;
+}
+
+th {
+  padding: 1vh;
+  font-weight: 500;
+}
+
+td {
+  padding: 1vh;
+  border: 1px solid whitesmoke;
+  font-weight: 100;
+}

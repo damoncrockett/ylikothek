@@ -2,6 +2,7 @@
 node_modules
 dist
 fonts
+utils
 src/assets/json/
 src/assets/csv/
 utils/__pycache__

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { select } from 'd3-selection';
 
 const row = new Array(5).fill('material data cell');
-const arr = new Array(1000).fill(0);
+const arr = new Array(100).fill(0);
 
 
 export default function App() {

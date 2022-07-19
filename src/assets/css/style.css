@@ -35,13 +35,13 @@
   transform: translateX(-50%);
   overflow-y: auto;
   height: 90vh; /* scroll box exactly window height */
-  scrollbar-width: none; /* hides scrollbar in Firefox */
-  -ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
+  /*scrollbar-width: none; /* hides scrollbar in Firefox */
+  /*-ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
 }
 
 #viewpane::-webkit-scrollbar { /* hides scrollbar in Safari + Chrome */
-    width: 0;
-    height: 0;
+    /* width: 0;*/
+    /*height: 0;*/
 }
 
 table {
@@ -55,6 +55,7 @@ table {
   position: sticky;
   top: 0;
   background-color: white;
+  padding: 2vh;
 }
 
 #tabular {
@@ -63,15 +64,16 @@ table {
 
 #tablebox {
   overflow: hidden;
+  padding: 2vh;
 }
 
 th {
-  padding: 1vh;
+  padding: 2vh;
   font-weight: 500;
 }
 
 td {
-  padding: 1vh;
+  padding: 2vh;
   border: 1px solid whitesmoke;
   font-weight: 100;
 }

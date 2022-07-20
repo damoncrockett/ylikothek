@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;400&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 #app {
 
@@ -11,6 +12,7 @@
   top: 0;
   left: 0;
   width: 100vw;
+  color: dimgrey;
 }
 
 #title {
@@ -30,11 +32,11 @@
 
 #viewpane {
   position: fixed;
-  top: 10vh;
+  top: 12vh;
   left: 50%;
   transform: translateX(-50%);
   overflow-y: auto;
-  height: 90vh; /* scroll box exactly window height */
+  height: 88vh; /* scroll box exactly window height */
   /*scrollbar-width: none; /* hides scrollbar in Firefox */
   /*-ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
 }
@@ -52,13 +54,21 @@
 }
 
 th {
-  padding: 2vh;
-  font-weight: 500;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-bottom: 2vh;
+  font-weight: 400;
   position: sticky;
   top: 0;
   background-color: white;
   font-weight: 500;
   font-family: "Yantramanav";
+  color: dimgrey;
+}
+
+.colLabel {
+  position: sticky;
+  top: 5vh;
 }
 
 td {
@@ -66,4 +76,56 @@ td {
   border: 1px solid whitesmoke;
   font-weight: 100;
   font-family: "Yantramanav";
+}
+
+.datarow {
+  color: black;
+}
+
+.datarow:hover {
+  background-color: grey;
+  color: white;
+}
+
+.material-icons {
+  font-family: 'Material Icons' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5vh;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+
+}
+
+button {
+  border: 1px solid white;
+  border-radius: 0.5vh;
+  background-color: white;
+  color: dimgrey;
+  display: inline-block;
+}
+
+button.active {
+  background-color: dimgrey;
+  color: white;
+}
+
+button:hover {
+  border-color: dimgrey;
 }

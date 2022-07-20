@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { select } from 'd3-selection';
+import { data } from './data';
 
-const row = new Array(5).fill('material data cell');
-const arr = new Array(100).fill(0);
-
+const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
+              'SAMPLE TYPE', 'ACQUISITION DATE', 'GEOGRAPHIC ORIGIN',
+              'MANUFACTURER', 'AVAILABLE DATA', 'COLOR'];
 
 export default function App() {
 
   useEffect(() => {
 
-    select("#colhead")
+    select("#thead")
       .selectAll("tr")
       .data([0])
       .enter()
@@ -17,24 +18,24 @@ export default function App() {
       .each(function(d) {
         select(this)
           .selectAll("th")
-          .data(row)
+          .data(cols)
           .enter()
           .append("th")
           .text(r => r)
         })
 
-    select("#tabular")
+    select("#tbody")
       .selectAll("tr")
-      .data(arr)
+      .data(data)
       .enter()
       .append("tr")
       .each(function(d) {
         select(this)
           .selectAll("td")
-          .data(row)
+          .data(d)
           .enter()
           .append("td")
-          .text(r => '_' + r )
+          .text(r => r )
       })
   },[])
 
@@ -45,10 +46,10 @@ export default function App() {
         <span id='subtitle'>MATERIALS DATABASE</span>
       </div>
       <div id='viewpane'>
-        <table id='colhead'></table>
-        <div id='tablebox'>
-          <table id='tabular'></table>
-        </div>
+        <table id='tabular'>
+          <thead id='thead'></thead>
+          <tbody id='tbody'></tbody>
+        </table>
       </div>
     </div>
   )

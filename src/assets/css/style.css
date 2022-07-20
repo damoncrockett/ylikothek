@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Wire+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;500&display=swap');
 
 #app {
 
@@ -58,12 +57,13 @@ th {
   position: sticky;
   top: 0;
   background-color: white;
-  font-family: "Teko";
+  font-weight: 500;
+  font-family: "Yantramanav";
 }
 
 td {
   padding: 2vh;
   border: 1px solid whitesmoke;
   font-weight: 100;
-  font-family: "Wire One"
+  font-family: "Yantramanav";
 }

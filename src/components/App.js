@@ -5,6 +5,32 @@ const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
               'SAMPLE TYPE', 'ACQUISITION DATE', 'GEOGRAPHIC ORIGIN',
               'MANUFACTURER', 'AVAILABLE DATA', 'COLOR'];
 
+const valueCounts = (arr) => arr.reduce((ac,a) => (ac[a] = ac[a] + 1 || 1,ac), {});
+
+function CountModal({ countCol, filterList }) {
+  let processedData = [...data];
+
+  filterList.forEach((item, i) => {
+    if ( item !== '' ) {
+      processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+    }
+  });
+
+  const countObject = valueCounts(processedData.map(d => d[countCol]));
+  const cell = document.getElementById("c"+countCol);
+
+  const width = cell.offsetWidth;
+  const left = cell.getBoundingClientRect().left;
+  const bottom = cell.getBoundingClientRect().bottom;
+  const height = window.innerHeight - bottom;
+
+  return (
+    <div id='countModal' style={{width: width, height: height, top: bottom, left: left}}>
+      {Object.keys(countObject).sort().map((d,i) => <p key={i}>{d+" "+countObject[d]}</p>)}
+    </div>
+  )
+}
+
 function TableCells({ sortCol, asc, filterList }) {
 
   let processedData = [...data];
@@ -23,7 +49,7 @@ function TableCells({ sortCol, asc, filterList }) {
 
   return (
     <tbody id='tbody'>
-      {processedData.map(d => <tr className='datarow'>{d.map(i => <td>{i}</td>)}</tr>)}
+      {processedData.map((d,idx) => <tr key={idx} className='datarow'>{d.map((i,j) => <td key={j}>{i}</td>)}</tr>)}
     </tbody>
   )
 }
@@ -34,6 +60,8 @@ export default function App() {
   const [asc, setAsc] = useState(true);
   const [searchTerms, setSearchTerms] = useState(['','','','','','','','','','']);
   const fieldsRef = useRef(cols.map(() => createRef()));
+  const [countModal, setCountModal] = useState(false);
+  const [countCol, setCountCol] = useState('');
 
   return (
     <div id='app'>
@@ -45,18 +73,19 @@ export default function App() {
         <table id='tabular'>
           <thead id='thead'>
             <tr>
-              {cols.map((c,i) => <th className="searchField"><form onSubmit={e => {e.preventDefault();const tmp=[...searchTerms];tmp[i]=fieldsRef.current[i].current.value;setSearchTerms(tmp)}}><input ref={fieldsRef.current[i]} type="text" className="searchField" /></form></th>)}
+              {cols.map((c,i) => <th key={i} className="searchField"><form onSubmit={e => {e.preventDefault();const tmp=[...searchTerms];tmp[i]=fieldsRef.current[i].current.value;setSearchTerms(tmp)}}><input ref={fieldsRef.current[i]} type="text" className="searchField" /></form></th>)}
             </tr>
             <tr>
-              {cols.map(c => <th><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false)}} >arrow_downward</button></th>)}
+              {cols.map((c,i) => <th key={i}><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false)}} >arrow_downward</button></th>)}
             </tr>
             <tr>
-              {cols.map(c => <th className='colLabel'>{c}</th>)}
+              {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(!countModal);setCountCol(i)}}>{c}</button></th>)}
             </tr>
           </thead>
           <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms}/>
         </table>
       </div>
+      {countModal && <CountModal countCol={countCol} filterList={searchTerms} />}
     </div>
   )
 }

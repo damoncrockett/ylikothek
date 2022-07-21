@@ -68,7 +68,16 @@ th {
 
 .colLabel {
   position: sticky;
-  top: 5vh;
+  top: 6vh;
+}
+
+#countModal {
+  position: fixed;
+  font-weight: 100;
+  font-family: "Yantramanav";
+  color: black;
+  background-color: white;
+  overflow-y: auto;
 }
 
 .searchField {
@@ -125,6 +134,7 @@ button {
   background-color: white;
   color: dimgrey;
   display: inline-block;
+  padding: 1vh;
 }
 
 button.active {

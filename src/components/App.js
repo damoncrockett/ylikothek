@@ -25,6 +25,7 @@ export default function App() {
 
   const [sortCol, setSortCol] = useState('INSTITUTION');
   const [asc, setAsc] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   return (
     <div id='app'>
@@ -35,6 +36,9 @@ export default function App() {
       <div id='viewpane'>
         <table id='tabular'>
           <thead id='thead'>
+            <tr>
+              {cols.map(c => <th className="searchField"><form onSubmit={e => {e.preventDefault();console.log('submit')}}><input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="searchField" /></form></th>)}
+            </tr>
             <tr>
               {cols.map(c => <th><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false)}} >arrow_downward</button></th>)}
             </tr>

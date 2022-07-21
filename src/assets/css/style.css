@@ -32,11 +32,11 @@
 
 #viewpane {
   position: fixed;
-  top: 12vh;
+  top: 18vh;
   left: 50%;
   transform: translateX(-50%);
   overflow-y: auto;
-  height: 88vh; /* scroll box exactly window height */
+  height: 82vh; /* scroll box exactly window height */
   /*scrollbar-width: none; /* hides scrollbar in Firefox */
   /*-ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
 }
@@ -59,7 +59,7 @@ th {
   padding-bottom: 2vh;
   font-weight: 400;
   position: sticky;
-  top: 0;
+  top: 3vh;
   background-color: white;
   font-weight: 500;
   font-family: "Yantramanav";
@@ -69,6 +69,12 @@ th {
 .colLabel {
   position: sticky;
   top: 5vh;
+}
+
+.searchField {
+  position: sticky;
+  top: 0vh;
+  width: 4vw;
 }
 
 td {

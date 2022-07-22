@@ -8,6 +8,9 @@ const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
 const valueCounts = (arr) => arr.reduce((ac,a) => (ac[a] = ac[a] + 1 || 1,ac), {});
 
 function CountModal({ countCol, filterList }) {
+
+  const [azSort,setAzSort] = useState(false);
+
   let processedData = [...data];
 
   filterList.forEach((item, i) => {
@@ -17,16 +20,31 @@ function CountModal({ countCol, filterList }) {
   });
 
   const countObject = valueCounts(processedData.map(d => d[countCol]));
+  let countArrays = [];
+
+  Object.keys(countObject).forEach((item, i) => {
+    const pair = [item, countObject[item]];
+    countArrays.push(pair);
+  });
+
+  countArrays = countArrays.sort((a,b) => b[1]-a[1] );
+
   const cell = document.getElementById("c"+countCol);
 
-  const width = cell.offsetWidth;
+  const compStyle = window.getComputedStyle(cell);
+  const width = compStyle.getPropertyValue('width');
   const left = cell.getBoundingClientRect().left;
   const bottom = cell.getBoundingClientRect().bottom;
-  const height = window.innerHeight - bottom;
+  const height = window.innerHeight - bottom - window.innerHeight * 0.04;
 
   return (
     <div id='countModal' style={{width: width, height: height, top: bottom, left: left}}>
-      {Object.keys(countObject).sort().map((d,i) => <p key={i}>{d+" "+countObject[d]}</p>)}
+      <div className='countsHeading'>
+        <span>COUNTS</span>
+        <button id='azSort' className={azSort ? 'material-icons active' : 'material-icons'} onClick={() => setAzSort(!azSort)} >sort_by_alpha</button>
+      </div>
+      {azSort && Object.keys(countObject).sort().map((d,i) => <p key={i}>{"["+countObject[d]+"]  "+d}</p>)}
+      {!azSort && countArrays.map((d,i) => <p key={i}>{"["+d[1]+"]  "+d[0]}</p>)}
     </div>
   )
 }
@@ -79,7 +97,7 @@ export default function App() {
               {cols.map((c,i) => <th key={i}><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false)}} >arrow_downward</button></th>)}
             </tr>
             <tr>
-              {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(!countModal);setCountCol(i)}}>{c}</button></th>)}
+              {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
           <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms}/>

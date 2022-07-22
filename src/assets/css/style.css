@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;300;400&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 #app {
@@ -32,11 +32,11 @@
 
 #viewpane {
   position: fixed;
-  top: 18vh;
+  top: 12vh;
   left: 50%;
   transform: translateX(-50%);
   overflow-y: auto;
-  height: 82vh; /* scroll box exactly window height */
+  height: 88vh; /* scroll box exactly window height */
   /*scrollbar-width: none; /* hides scrollbar in Firefox */
   /*-ms-overflow-style: none;  /* hides in Internet Explorer 10+ */
 }
@@ -73,11 +73,35 @@ th {
 
 #countModal {
   position: fixed;
-  font-weight: 100;
+  font-weight: 300;
   font-family: "Yantramanav";
-  color: black;
-  background-color: white;
+  color: white;
+  background-color: rgba(0, 53, 107, .82);
   overflow-y: auto;
+  padding: 2vh;
+}
+
+#countModal .countsHeading {
+  font-weight: 500;
+  margin-bottom: 2vh;
+}
+
+#azSort {
+  color: white;
+  background-color: transparent;
+  border: 1px solid transparent;
+  margin-top: 2vh;
+  margin-left: 2vh;
+  font-size: 1vh;
+}
+
+#azSort.active {
+  background-color: white;
+  color: rgb(0, 53, 107);
+}
+
+#azSort:hover {
+  border-color: white;
 }
 
 .searchField {

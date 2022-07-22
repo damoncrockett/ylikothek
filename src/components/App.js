@@ -30,7 +30,6 @@ function CountModal({ countCol, filterList }) {
   countArrays = countArrays.sort((a,b) => b[1]-a[1] );
 
   const cell = document.getElementById("c"+countCol);
-
   const compStyle = window.getComputedStyle(cell);
   const width = compStyle.getPropertyValue('width');
   const left = cell.getBoundingClientRect().left;
@@ -76,13 +75,21 @@ export default function App() {
 
   const [sortCol, setSortCol] = useState('INSTITUTION');
   const [asc, setAsc] = useState(true);
-  const [searchTerms, setSearchTerms] = useState(['','','','','','','','','','']);
+  const [searchTerms, setSearchTerms] = useState(new Array(cols.length).fill(''));
   const fieldsRef = useRef(cols.map(() => createRef()));
   const [countModal, setCountModal] = useState(false);
   const [countCol, setCountCol] = useState('');
 
   return (
     <div id='app'>
+      <div id='scrollers'>
+        <button id='top' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,0)}>vertical_align_top</button>
+        <button id='uup' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop - document.getElementById("tabular").getBoundingClientRect().height / 10)}>keyboard_double_arrow_up</button>
+        <button id='up' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop - document.getElementById("tabular").getBoundingClientRect().height / 20)}>keyboard_arrow_up</button>
+        <button id='down' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop + document.getElementById("tabular").getBoundingClientRect().height / 20)}>keyboard_arrow_down</button>
+        <button id='ddown' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop + document.getElementById("tabular").getBoundingClientRect().height / 10)}>keyboard_double_arrow_down</button>
+        <button id='bottom' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("tabular").getBoundingClientRect().height)}>vertical_align_bottom</button>
+      </div>
       <div id='banner'>
         <span id='title'>ylikothek</span>
         <span id='subtitle'>MATERIALS DATABASE</span>
@@ -94,7 +101,7 @@ export default function App() {
               {cols.map((c,i) => <th key={i} className="searchField"><form onSubmit={e => {e.preventDefault();const tmp=[...searchTerms];tmp[i]=fieldsRef.current[i].current.value;setSearchTerms(tmp)}}><input ref={fieldsRef.current[i]} type="text" className="searchField" /></form></th>)}
             </tr>
             <tr>
-              {cols.map((c,i) => <th key={i}><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false)}} >arrow_downward</button></th>)}
+              {cols.map((c,i) => <th key={i}><button className={sortCol === c && asc === true ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(true);document.getElementById("viewpane").scrollTo(0,0)}} >arrow_upward</button><button title='sort' className={sortCol === c && asc === false ? 'material-icons active' : 'material-icons'} onClick={() => {setSortCol(c);setAsc(false);document.getElementById("viewpane").scrollTo(0,0)}} >arrow_downward</button></th>)}
             </tr>
             <tr>
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}

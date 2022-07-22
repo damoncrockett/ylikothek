@@ -7,6 +7,18 @@
 
 }
 
+#scrollers {
+  position: fixed;
+  left: 0;
+  top: 45vh;
+  padding-left: 2vh;
+  width: 1px;
+}
+
+#scrollers button {
+  margin-top: 1vh;
+}
+
 #banner {
   position: fixed;
   top: 0;
@@ -68,7 +80,7 @@ th {
 
 .colLabel {
   position: sticky;
-  top: 6vh;
+  top: 7vh;
 }
 
 #countModal {
@@ -84,24 +96,28 @@ th {
 #countModal .countsHeading {
   font-weight: 500;
   margin-bottom: 2vh;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  color: rgba(0, 53, 107, .82);
 }
 
 #azSort {
-  color: white;
+  color: rgba(0, 53, 107, .82);
   background-color: transparent;
   border: 1px solid transparent;
-  margin-top: 2vh;
-  margin-left: 2vh;
   font-size: 1vh;
+  padding: 0;
+  margin-left: 0.5vh;
 }
 
 #azSort.active {
-  background-color: white;
-  color: rgb(0, 53, 107);
+  background-color: rgba(0, 53, 107, .82);
+  color: white;
 }
 
 #azSort:hover {
-  border-color: white;
+  border-color: rgba(0, 53, 107, .82);
 }
 
 .searchField {
@@ -122,8 +138,7 @@ td {
 }
 
 .datarow:hover {
-  background-color: grey;
-  color: white;
+  background-color: whitesmoke;
 }
 
 .material-icons {

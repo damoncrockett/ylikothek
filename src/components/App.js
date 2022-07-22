@@ -7,6 +7,20 @@ const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
 
 const valueCounts = (arr) => arr.reduce((ac,a) => (ac[a] = ac[a] + 1 || 1,ac), {});
 
+function anybool(iterable) {
+    for (var index = 0; index < iterable.length; index++) {
+        if (iterable[index]) return true;
+    }
+    return false;
+}
+
+function allbool(iterable) {
+    for (var index = 0; index < iterable.length; index++) {
+        if (!iterable[index]) return false;
+    }
+    return true;
+}
+
 function CountModal({ countCol, filterList }) {
 
   const [azSort,setAzSort] = useState(false);
@@ -15,7 +29,15 @@ function CountModal({ countCol, filterList }) {
 
   filterList.forEach((item, i) => {
     if ( item !== '' ) {
-      processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+      if ( item.includes('&') ) {
+        const items = item.split('&');
+        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
+      } else if ( item.includes('|') ) {
+        const items = item.split('|');
+        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
+      } else {
+        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+      }
     }
   });
 
@@ -54,7 +76,15 @@ function TableCells({ sortCol, asc, filterList }) {
 
   filterList.forEach((item, i) => {
     if ( item !== '' ) {
-      processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+      if ( item.includes('&') ) {
+        const items = item.split('&');
+        processedData = processedData.filter(d => d[i].toLowerCase().includes(items[0].toLowerCase()) && d[i].toLowerCase().includes(items[1].toLowerCase()) )
+      } else if ( item.includes('|') ) {
+        const items = item.split('|');
+        processedData = processedData.filter(d => d[i].toLowerCase().includes(items[0].toLowerCase()) || d[i].toLowerCase().includes(items[1].toLowerCase()) )
+      } else {
+        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+      }
     }
   });
 

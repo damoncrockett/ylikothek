@@ -1,9 +1,25 @@
 import React, { Component, useState, useEffect, useRef, createRef } from 'react';
 import { data } from './data';
+import { dataraw } from './dataraw';
 
 const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
               'SAMPLE TYPE', 'ACQUISITION DATE', 'GEOGRAPHIC ORIGIN',
               'MANUFACTURER', 'AVAILABLE DATA', 'COLOR'];
+
+const rawcols = ['Common Name','Additional Names','Sample Type','Typical Use',
+ 'Chemical Formula','Chemical Name','Chemical (CAS) No.','Compound Type',
+ 'Mixture Type','Physical Form','Color','Color Index (CI) No.','Natural/Synthetic',
+ 'Preparation','Certified Standard?','Barcode Prefix','Barcode No.','Full Barcode', //17
+ 'Grid Location','MSDS Sheet?','Acquisition Date','Geographic Origin','Part of a Collection?',
+ 'Collection Name','Acquired By','Acquired From','Contact Name','Phone No.','E-Mail',
+ 'Manufacturer','Catalog No.','Origination Date','Available Data','Mass or Volume',
+ 'Experiments','Notes','MSDS - Reporting','Fire Safety','Reactivity Safety','Health Safety',
+ 'Other Safety','Warning Field','In Stock?','In Stock? - Reporting','Inventory Tracking barcode',
+ 'Inventory Tracking checkin','Inventory Tracking checkout','Checked Out By','Check Out Date',
+ 'Old Barcode','Component1','Component2','Component3','Mixture Pigment','Formulation',
+ 'Component 1 dummy field','Component 2 dummy field','Component 3 dummy field',
+ 'Mixture Pigment dummy field','Formulation dummy field','Analysis Date','Insturment',
+ 'Analysis Lab','Sample Prep','Scan Parameters','Chem Composition Confirmed','testbarcode'];
 
 const valueCounts = (arr) => arr.reduce((ac,a) => (ac[a] = ac[a] + 1 || 1,ac), {});
 
@@ -24,7 +40,6 @@ function allbool(iterable) {
 function CountModal({ countCol, filterList }) {
 
   const [azSort,setAzSort] = useState(false);
-
   let processedData = [...data];
 
   filterList.forEach((item, i) => {
@@ -70,7 +85,7 @@ function CountModal({ countCol, filterList }) {
   )
 }
 
-function TableCells({ sortCol, asc, filterList }) {
+function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow }) {
 
   let processedData = [...data];
 
@@ -78,10 +93,10 @@ function TableCells({ sortCol, asc, filterList }) {
     if ( item !== '' ) {
       if ( item.includes('&') ) {
         const items = item.split('&');
-        processedData = processedData.filter(d => d[i].toLowerCase().includes(items[0].toLowerCase()) && d[i].toLowerCase().includes(items[1].toLowerCase()) )
+        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
       } else if ( item.includes('|') ) {
         const items = item.split('|');
-        processedData = processedData.filter(d => d[i].toLowerCase().includes(items[0].toLowerCase()) || d[i].toLowerCase().includes(items[1].toLowerCase()) )
+        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
       } else {
         processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
       }
@@ -96,8 +111,17 @@ function TableCells({ sortCol, asc, filterList }) {
 
   return (
     <tbody id='tbody'>
-      {processedData.map((d,idx) => <tr key={idx} className='datarow'>{d.map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {processedData.map((d,idx) => <tr key={idx} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw.filter(r => r[17]===d[2])[0])}} >{d.map((i,j) => <td key={j}>{i}</td>)}</tr>)}
     </tbody>
+  )
+}
+
+function RawModal({ rawRow, setRawModal }) {
+  return (
+    <div id='rawModal'>
+      <button id='rawModalClose' className='material-icons' onClick={()=>setRawModal(false)}>close</button>
+      {rawRow.map((r,i) => <p key={i}>{"[" + rawcols[i] + "] " + r}</p>)}
+    </div>
   )
 }
 
@@ -109,6 +133,8 @@ export default function App() {
   const fieldsRef = useRef(cols.map(() => createRef()));
   const [countModal, setCountModal] = useState(false);
   const [countCol, setCountCol] = useState('');
+  const [rawModal,setRawModal] = useState(false);
+  const [rawRow,setRawRow] = useState(new Array(rawcols.length).fill(''));
 
   return (
     <div id='app'>
@@ -137,10 +163,11 @@ export default function App() {
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
-          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms}/>
+          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} setRawModal={setRawModal} setRawRow={setRawRow}/>
         </table>
       </div>
       {countModal && <CountModal countCol={countCol} filterList={searchTerms} />}
+      {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} />}
     </div>
   )
 }

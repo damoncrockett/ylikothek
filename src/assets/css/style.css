@@ -19,6 +19,27 @@
   margin-top: 1vh;
 }
 
+#rawModal {
+  position: fixed;
+  top: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  height: 88vh;
+  border: 1px solid dimgrey;
+  background-color: whitesmoke;
+  color: dimgrey;
+  font-weight: 300;
+  font-family: "Yantramanav";
+  font-size: 2vh;
+  padding: 4vh;
+}
+
+#rawModalClose {
+  position: sticky;
+  top: 0;
+}
+
 #banner {
   position: fixed;
   top: 0;

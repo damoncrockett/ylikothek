@@ -71,7 +71,7 @@ function CountModal({ countCol, filterList }) {
   const width = compStyle.getPropertyValue('width');
   const left = cell.getBoundingClientRect().left;
   const bottom = cell.getBoundingClientRect().bottom;
-  const height = window.innerHeight - bottom - window.innerHeight * 0.04;
+  const height = window.innerHeight - bottom - window.innerHeight * 0.02;
 
   return (
     <div id='countModal' style={{width: width, height: height, top: bottom, left: left}}>

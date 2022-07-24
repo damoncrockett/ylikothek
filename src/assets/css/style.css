@@ -7,6 +7,34 @@
 
 }
 
+#loadingScreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: whitesmoke;
+  z-index: 10;
+  position: relative;
+}
+
+.loader {
+  margin: auto;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  border: 20px solid gainsboro;
+  border-radius: 50%;
+  border-top: 20px solid rgb(0, 53, 107);
+  width: 20vw;
+  height: 20vw;
+  animation: spinner 4s linear infinite;
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 #scrollers {
   position: fixed;
   left: 0;

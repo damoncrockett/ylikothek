@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef, createRef } from 'react';
+import React, { Component, useState, useEffect, useLayoutEffect, useRef, createRef } from 'react';
 import { data } from './data';
 import { dataraw } from './dataraw';
 
@@ -159,9 +159,15 @@ export default function App() {
   const [countCol, setCountCol] = useState('');
   const [rawModal,setRawModal] = useState(false);
   const [rawRow,setRawRow] = useState(new Array(rawcols.length).fill(''));
+  const [loading,setLoading] = useState(true);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 7500)
 
   return (
     <div id='app'>
+      {loading && <div id='loadingScreen'><div className='loader'></div></div>}
       <div id='scrollers'>
         <button id='top' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,0)}>vertical_align_top</button>
         <button id='uup' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop - document.getElementById("tabular").getBoundingClientRect().height / 10)}>keyboard_double_arrow_up</button>

@@ -37,7 +37,7 @@ function allbool(iterable) {
     return true;
 }
 
-function CountModal({ countCol, filterList }) {
+function CountModal({ countModal, countCol, filterList }) {
 
   const [azSort,setAzSort] = useState(false);
   let processedData = [...data];
@@ -73,14 +73,29 @@ function CountModal({ countCol, filterList }) {
   const bottom = cell.getBoundingClientRect().bottom;
   const height = window.innerHeight - bottom - window.innerHeight * 0.02;
 
+  useEffect(() => {
+    if ( countModal ) {
+      document.getElementById("countModal").scrollTo(0,0);
+    }
+  },[countCol])
+
   return (
     <div id='countModal' style={{width: width, height: height, top: bottom, left: left}}>
       <div className='countsHeading'>
         <span>COUNTS</span>
-        <button id='azSort' className={azSort ? 'material-icons active' : 'material-icons'} onClick={() => setAzSort(!azSort)} >sort_by_alpha</button>
+        <button id='azSort' className={azSort ? 'material-icons active' : 'material-icons'} onClick={() =>{setAzSort(!azSort);document.getElementById("countModal").scrollTo(0,0)}} >sort_by_alpha</button>
       </div>
-      {azSort && Object.keys(countObject).sort().map((d,i) => <p key={i}>{"["+countObject[d]+"]  "+d}</p>)}
-      {!azSort && countArrays.map((d,i) => <p key={i}>{"["+d[1]+"]  "+d[0]}</p>)}
+      {azSort && Object.keys(countObject).sort().map((d,i) => <p key={i}>{<FormatCountModal ct={countObject[d]} val={d} />}</p>)}
+      {!azSort && countArrays.map((d,i) => <p key={i}>{<FormatCountModal ct={d[1]} val={d[0]} />}</p>)}
+    </div>
+  )
+}
+
+function FormatCountModal({ ct, val }) {
+  return (
+    <div>
+      <span className='countModalCt'>{ct}</span>
+      <span className={val==='' ? 'countModalNull' : 'countModalVal'}>{val==='' ? '[null]' : val}</span>
     </div>
   )
 }
@@ -116,11 +131,20 @@ function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow }) {
   )
 }
 
+const FormatRaw = ({ cat, val }) => {
+  return (
+    <div>
+      <span className={val==='' ? 'rawCatGhost' : 'rawCat'}>{cat}</span>
+      <span className='rawVal'>{val}</span>
+    </div>
+  )
+}
+
 function RawModal({ rawRow, setRawModal }) {
   return (
     <div id='rawModal'>
       <button id='rawModalClose' className='material-icons' onClick={()=>setRawModal(false)}>close</button>
-      {rawRow.map((r,i) => <p key={i}>{"[" + rawcols[i] + "] " + r}</p>)}
+      {rawRow.map((r,i) => <p key={i}>{<FormatRaw cat={rawcols[i]} val={r} />}</p>)}
     </div>
   )
 }
@@ -166,7 +190,7 @@ export default function App() {
           <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} setRawModal={setRawModal} setRawRow={setRawRow}/>
         </table>
       </div>
-      {countModal && <CountModal countCol={countCol} filterList={searchTerms} />}
+      {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} />}
       {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} />}
     </div>
   )

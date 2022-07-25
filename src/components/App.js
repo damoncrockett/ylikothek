@@ -163,7 +163,7 @@ export default function App() {
 
   setTimeout(() => {
     setLoading(false);
-  }, 7500)
+  }, 10000)
 
   return (
     <div id='app'>

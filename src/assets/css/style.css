@@ -15,6 +15,34 @@
   position: relative;
 }
 
+#loadingMsg {
+  position: fixed;
+  top: 14vh;
+  left: 50%;
+  transform: translateX(-50%);
+  color: dimgrey;
+}
+
+#loadingEnglish {
+  font-family: sans-serif;
+  font-size: 1.5vh;
+  text-align: center;
+}
+
+#loadingGreek {
+  font-family: serif;
+  font-style: italic;
+  font-size: 3vh;
+  text-align: center;
+}
+
+#loadingTitle {
+  font-family: sans-serif;
+  font-size: 6vh;
+  text-align: center;
+  margin: 0;
+}
+
 .loader {
   margin: auto;
   position: absolute;
@@ -24,9 +52,9 @@
   top: 0px;
   border: 20px solid gainsboro;
   border-radius: 50%;
-  border-top: 20px solid rgb(0, 53, 107);
-  width: 20vw;
-  height: 20vw;
+  border-top: 20px solid rgba(0, 53, 107, .82);
+  width: 10vw;
+  height: 10vw;
   animation: spinner 4s linear infinite;
 }
 

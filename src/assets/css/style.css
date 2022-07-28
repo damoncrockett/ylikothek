@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;300;400;700;900&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
@@ -23,15 +23,8 @@
   color: dimgrey;
 }
 
-#loadingEnglish {
+#loadingSubtitle {
   font-family: sans-serif;
-  font-size: 1.5vh;
-  text-align: center;
-}
-
-#loadingGreek {
-  font-family: serif;
-  font-style: italic;
   font-size: 3vh;
   text-align: center;
 }
@@ -120,7 +113,7 @@
 }
 
 #title {
-  font-family: 'GFS Neohellenic', sans-serif;
+  font-family: 'Staatliches', sans-serif;
   font-size: 6vh;
   padding-top: 3vh;
   padding-bottom: 3vh;

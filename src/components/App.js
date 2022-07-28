@@ -167,7 +167,7 @@ export default function App() {
 
   return (
     <div id='app'>
-      {loading && <div id='loadingScreen'><div id='loadingMsg'><p id='loadingTitle'>ylikothek</p><p id='loadingGreek'>ylikós thḗkē</p><p id='loadingEnglish'>MATERIAL BOX</p></div><div className='loader'></div></div>}
+      {loading && <div id='loadingScreen'><div id='loadingMsg'><p id='loadingTitle'>IOMA</p><p id='loadingSubtitle'>Index Of Materials</p></div><div className='loader'></div></div>}
       <div id='scrollers'>
         <button id='top' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,0)}>vertical_align_top</button>
         <button id='uup' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop - document.getElementById("tabular").getBoundingClientRect().height / 10)}>keyboard_double_arrow_up</button>
@@ -177,8 +177,7 @@ export default function App() {
         <button id='bottom' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("tabular").getBoundingClientRect().height)}>vertical_align_bottom</button>
       </div>
       <div id='banner'>
-        <span id='title'>ylikothek</span>
-        <span id='subtitle'>MATERIALS DATABASE</span>
+        <span id='title'>ioma</span>
       </div>
       <div id='viewpane'>
         <table id='tabular'>

@@ -1,15 +1,13 @@
 import React, { Component, useState, useEffect, useLayoutEffect, useRef, createRef } from 'react';
 import { data } from './data';
-import { dataraw } from './dataraw';
+import { dataraw } from './raw';
 
-const cols = ['INSTITUTION', 'CATALOG NO.', 'FULL BARCODE', 'COMMON NAME',
-              'SAMPLE TYPE', 'ACQUISITION DATE', 'GEOGRAPHIC ORIGIN',
-              'MANUFACTURER', 'AVAILABLE DATA', 'COLOR'];
+const cols = ['INSTITUTION','INDEX','NAME','TYPE','YEAR','ORIGIN','MANUFACTURER','COLOR','ANALYSIS'];
 
-const rawcols = ['Common Name','Additional Names','Sample Type','Typical Use',
+const gettycols = ['Common Name','Additional Names','Sample Type','Typical Use',
  'Chemical Formula','Chemical Name','Chemical (CAS) No.','Compound Type',
  'Mixture Type','Physical Form','Color','Color Index (CI) No.','Natural/Synthetic',
- 'Preparation','Certified Standard?','Barcode Prefix','Barcode No.','Full Barcode', //17
+ 'Preparation','Certified Standard?','Barcode Prefix','Barcode No.','Full Barcode',
  'Grid Location','MSDS Sheet?','Acquisition Date','Geographic Origin','Part of a Collection?',
  'Collection Name','Acquired By','Acquired From','Contact Name','Phone No.','E-Mail',
  'Manufacturer','Catalog No.','Origination Date','Available Data','Mass or Volume',
@@ -19,7 +17,56 @@ const rawcols = ['Common Name','Additional Names','Sample Type','Typical Use',
  'Old Barcode','Component1','Component2','Component3','Mixture Pigment','Formulation',
  'Component 1 dummy field','Component 2 dummy field','Component 3 dummy field',
  'Mixture Pigment dummy field','Formulation dummy field','Analysis Date','Insturment',
- 'Analysis Lab','Sample Prep','Scan Parameters','Chem Composition Confirmed','testbarcode'];
+ 'Analysis Lab','Sample Prep','Scan Parameters','Chem Composition Confirmed','testbarcode',
+ 'Institution']; //68
+
+const ngacols = ['Number', 'Analysis Results', 'Approximate Manufacture Date',
+       'Box Number', 'Chemical Formula', 'CI Name', 'CI Number',
+       'Classification', 'Color', 'Container', 'Crimp Number', 'Duplicate of',
+       'Group Characteristics', 'Group Number', 'Hue', 'Item with No Label',
+       'Label Text', 'Lightfastness', 'Lit Sample Code', 'Location Status',
+       'Manufacturer', 'Manufacturer Address', 'Manufacturer Code',
+       'Manufacturer ID', 'Media Reported', 'Missing Item', 'ml Calculation',
+       'ml Entry', 'Number in Group', 'Number in Set', 'Number of Duplicates',
+       'Other Size Information', 'oz Calculation', 'oz Entry', 'Parent Item',
+       'Pigment Property', 'Pigment Reported by Manufacturer',
+       'Pigment Scientific Name', 'Price Tag Information', 'Product',
+       'Retail Price', 'Sample Notes', 'See Also', 'Set Characteristics',
+       'Set Number', 'Vintage Category', '::Literature Available',
+       '::Manufacturer', '::_PK_Classification Number', 'Institution'];  //50
+
+const ngarawcols = ['Box Number', 'Chemical Formula', 'Cl Name', 'Cl Number',
+       'Classification', 'Classification Number', 'Color', 'Container',
+       'Distinguishing Characteristics', 'Group Number', 'Hue', 'Item Number',
+       'Label Text', 'Manufacture Date', 'Manufacturer',
+       'Manufacturer Address', 'Manufacturer ID', 'Media Reported',
+       'ml Calculation', 'ml Entry', 'Notes', 'Number in Group',
+       'Other Size Information', 'ox Calculation', 'oz Entry',
+       'Pigment Reported', 'Place of Origin', 'Price Tag Information',
+       'Product', 'Institution']; //30
+
+const yalecols = ['PhotoID','Year','Catalog Number','Secondary Catalog Number',
+ 'Number of sheets (apx)','DateUncertain','Manufacturer','Brand','PhotoPapers_Notes',
+ 'Sampled','Scanned','FluorescenceVerso','FluorescenceRecto','FLuorescence Notes',
+ 'OBAVersoIndeterminant','OBACheck','OBARectoIndeterminant','OmitFromOBASurvey',
+ 'Copy','Copies','FiberSampleSent','FiberSample','T1','T2','T3','T4','T5','Mounted?',
+ 'Emulsion_thickness','FiberSampleSendDate','GCI_analysis','D','W1','W2','W3',
+ "Walter'sBook",'FiberResutls','OmitFromLogoWebsite?','WhyOmittedFromLogoWebsite',
+ 'BackprintingWebsite','MoMATextureStudy','new_surface_image_needed?','surface_image',
+ 'Yale_inventory?','Thickness?','Gloss?','Texture?','Color?','Missing sample Oct 2019',
+ 'LocationBox','LocationBag','LocationNotes','gloss','processing_instructions',
+ 'IntroductionDate','EndDate','Export_csvQRY_Brand_Notes','Expr1057','Expr1058',
+ 'BaseColor2','BaseColor2Definition','L*-recto','a*-recto','b*-recto','R-recto',
+ 'G-recto','B-recto','L*-verso','a*-verso','b*-verso','R-verso','G-verso',
+ 'B-verso','PaperGrade2','PaperGrade2Definition','PaperGrade2Code','ContrastGrade_Notes',
+ 'Amount','FiberResults_Notes','SpeciesNotes','SpeciesID','FiberType','Species',
+ 'Export_csvQRY_Species_Notes','Finish','Export_csvQRY_Finish_Notes','Format',
+ 'Export_csvQRY_Format_Notes','ComapnyStartDate','CompanyEndDate','CompanyAddress',
+ 'MergeHistory','Bibliography','Export_csvQRY_Manufacturer_Notes','Month','Purpose2',
+ 'Purpose2Definition','Reflectance2','Reflectance2Definition','Texture2','Texture2Definition',
+ 'Weight2','Weight2Definition','Size','Export_csvQRY_Size_Notes','SurfaceDesignation2Definition',
+ 'SurfaceDesignation2','SurfaceDesignation2Term','Institution'];
+
 
 const valueCounts = (arr) => arr.reduce((ac,a) => (ac[a] = ac[a] + 1 || 1,ac), {});
 
@@ -85,8 +132,8 @@ function CountModal({ countModal, countCol, filterList }) {
         <span>COUNTS</span>
         <button id='azSort' className={azSort ? 'material-icons active' : 'material-icons'} onClick={() =>{setAzSort(!azSort);document.getElementById("countModal").scrollTo(0,0)}} >sort_by_alpha</button>
       </div>
-      {azSort && Object.keys(countObject).sort().map((d,i) => <p key={i}>{<FormatCountModal ct={countObject[d]} val={d} />}</p>)}
-      {!azSort && countArrays.map((d,i) => <p key={i}>{<FormatCountModal ct={d[1]} val={d[0]} />}</p>)}
+      {azSort && Object.keys(countObject).sort().map((d,i) => <div className='countCell' key={i}>{<FormatCountModal ct={countObject[d]} val={d} />}</div>)}
+      {!azSort && countArrays.map((d,i) => <div className='countCell' key={i}>{<FormatCountModal ct={d[1]} val={d[0]} />}</div>)}
     </div>
   )
 }
@@ -100,7 +147,7 @@ function FormatCountModal({ ct, val }) {
   )
 }
 
-function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow }) {
+function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow, setRawCols }) {
 
   let processedData = [...data];
 
@@ -126,7 +173,7 @@ function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow }) {
 
   return (
     <tbody id='tbody'>
-      {processedData.map((d,idx) => <tr key={idx} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw.filter(r => r[17]===d[2])[0])}} >{d.map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {processedData.map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);console.log(d[9])}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
     </tbody>
   )
 }
@@ -140,11 +187,11 @@ const FormatRaw = ({ cat, val }) => {
   )
 }
 
-function RawModal({ rawRow, setRawModal }) {
+function RawModal({ rawRow, setRawModal, rawCols }) {
   return (
     <div id='rawModal'>
       <button id='rawModalClose' className='material-icons' onClick={()=>setRawModal(false)}>close</button>
-      {rawRow.map((r,i) => <p key={i}>{<FormatRaw cat={rawcols[i]} val={r} />}</p>)}
+      {rawRow.map((r,i) => <div className='rawCell' key={i}>{<FormatRaw cat={rawCols[i]} val={r} />}</div>)}
     </div>
   )
 }
@@ -158,7 +205,8 @@ export default function App() {
   const [countModal, setCountModal] = useState(false);
   const [countCol, setCountCol] = useState('');
   const [rawModal,setRawModal] = useState(false);
-  const [rawRow,setRawRow] = useState(new Array(rawcols.length).fill(''));
+  const [rawRow,setRawRow] = useState(null);
+  const [rawCols,setRawCols] = useState(null);
   const [loading,setLoading] = useState(true);
 
   setTimeout(() => {
@@ -192,11 +240,11 @@ export default function App() {
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
-          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} setRawModal={setRawModal} setRawRow={setRawRow}/>
+          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} />
         </table>
       </div>
       {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} />}
-      {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} />}
+      {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} rawCols={rawCols} />}
     </div>
   )
 }

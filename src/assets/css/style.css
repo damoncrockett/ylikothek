@@ -99,9 +99,14 @@
   margin-left: 1vw;
 }
 
+.rawCell {
+  margin: 1vh;
+}
+
 #rawModalClose {
   position: sticky;
   top: 0;
+  margin-bottom: 2vh;
 }
 
 #banner {
@@ -193,6 +198,10 @@ th {
 
 .countModalNull {
   font-style: italic;
+}
+
+.countCell {
+  margin: 1vh;
 }
 
 #countModal .countsHeading {

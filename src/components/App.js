@@ -84,10 +84,20 @@ function allbool(iterable) {
     return true;
 }
 
-function CountModal({ countModal, countCol, filterList }) {
+function CountModal({ countModal, countCol, filterList, totalFilter }) {
 
   const [azSort,setAzSort] = useState(false);
   let processedData = [...data];
+
+  if ( totalFilter !== '' ) {
+    const totalFilterIdxs = [];
+    dataraw.forEach((item, i) => {
+      if ( anybool(item.map(d => d.toLowerCase().includes(totalFilter.toLowerCase()))) ) {
+        totalFilterIdxs.push(i.toString());
+      }
+    });
+    processedData = processedData.filter(d => totalFilterIdxs.includes(d[9]));
+  }
 
   filterList.forEach((item, i) => {
     if ( item !== '' ) {
@@ -147,9 +157,20 @@ function FormatCountModal({ ct, val }) {
   )
 }
 
-function TableCells({ sortCol, asc, filterList, setRawModal, setRawRow, setRawCols }) {
+function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRawRow, setRawCols }) {
 
   let processedData = [...data];
+
+  if ( totalFilter !== '' ) {
+    const totalFilterIdxs = [];
+    dataraw.forEach((item, i) => {
+      if ( anybool(item.map(d => d.toLowerCase().includes(totalFilter.toLowerCase()))) ) {
+        totalFilterIdxs.push(i.toString());
+      }
+    });
+
+    processedData = processedData.filter(d => totalFilterIdxs.includes(d[9]));
+  }
 
   filterList.forEach((item, i) => {
     if ( item !== '' ) {
@@ -201,6 +222,8 @@ export default function App() {
   const [sortCol, setSortCol] = useState('INSTITUTION');
   const [asc, setAsc] = useState(true);
   const [searchTerms, setSearchTerms] = useState(new Array(cols.length).fill(''));
+  const [totalSearch, setTotalSearch] = useState('');
+  const totalRef = useRef();
   const fieldsRef = useRef(cols.map(() => createRef()));
   const [countModal, setCountModal] = useState(false);
   const [countCol, setCountCol] = useState('');
@@ -226,6 +249,7 @@ export default function App() {
       </div>
       <div id='banner'>
         <span id='title'>ioma</span>
+        <form id="totalSearch" onSubmit={e => {e.preventDefault();setTotalSearch(totalRef.current.value)}}><input ref={totalRef} type="text" /></form>
       </div>
       <div id='viewpane'>
         <table id='tabular'>
@@ -240,10 +264,10 @@ export default function App() {
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
-          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} />
+          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} totalFilter={totalSearch} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} />
         </table>
       </div>
-      {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} />}
+      {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} totalFilter={totalSearch} />}
       {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} rawCols={rawCols} />}
     </div>
   )

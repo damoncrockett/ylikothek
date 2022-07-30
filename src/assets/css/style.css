@@ -299,3 +299,30 @@ button.active {
 button:hover {
   border-color: dimgrey;
 }
+
+#pageButtons {
+  position: fixed;
+  bottom: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pageButton {
+  display: inline-block;
+  margin: 1vw;
+  background-color: transparent;
+  color: gainsboro;
+  font-family: 'Yantramanav';
+  border: 1px solid gainsboro;
+}
+
+.pageButton.active {
+  background-color: dimgrey;
+  border-color: dimgrey;
+}
+
+.pageButton:hover {
+  background-color: gainsboro;
+  border-color: gainsboro;
+  color: white;
+}

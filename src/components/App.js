@@ -157,7 +157,7 @@ function FormatCountModal({ ct, val }) {
   )
 }
 
-function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRawRow, setRawCols }) {
+function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRawRow, setRawCols, tablePage, setDataCount }) {
 
   let processedData = [...data];
 
@@ -186,6 +186,8 @@ function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRaw
     }
   });
 
+  setDataCount(processedData.length);
+
   if ( asc === true ) {
     processedData = processedData.sort((a,b) => a[cols.indexOf(sortCol)].localeCompare(b[cols.indexOf(sortCol)]));
   } else if ( asc === false ) {
@@ -194,7 +196,11 @@ function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRaw
 
   return (
     <tbody id='tbody'>
-      {processedData.map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);console.log(d[9])}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {tablePage===1 && processedData.slice(0,8451).map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {tablePage===2 && processedData.slice(8451,16902).map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {tablePage===3 && processedData.slice(16902,25353).map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {tablePage===4 && processedData.slice(25353,33804).map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
+      {tablePage===5 && processedData.slice(33804,42255).map(d => <tr key={d[9]} className='datarow' onClick={()=>{setRawModal(true);setRawRow(dataraw[d[9]]);setRawCols(dataraw[d[9]].length===68 ? gettycols : dataraw[d[9]].length===50 ? ngacols : dataraw[d[9]].length===30 ? ngarawcols : yalecols);}} >{d.slice(0,9).map((i,j) => <td key={j}>{i}</td>)}</tr>)}
     </tbody>
   )
 }
@@ -231,6 +237,8 @@ export default function App() {
   const [rawRow,setRawRow] = useState(null);
   const [rawCols,setRawCols] = useState(null);
   const [loading,setLoading] = useState(true);
+  const [tablePage,setTablePage] = useState(1);
+  const [dataCount,setDataCount] = useState(42254);
 
   setTimeout(() => {
     setLoading(false);
@@ -264,8 +272,15 @@ export default function App() {
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
-          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} totalFilter={totalSearch} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} />
+          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} totalFilter={totalSearch} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} tablePage={tablePage} setDataCount={setDataCount} />
         </table>
+      </div>
+      <div id='pageButtons'>
+        {dataCount > 8451 && <button className={tablePage===1 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(1)} >1</button>}
+        {dataCount > 8451 && <button className={tablePage===2 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(2)} >2</button>}
+        {dataCount > 16902 && <button className={tablePage===3 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(3)} >3</button>}
+        {dataCount > 25353 && <button className={tablePage===4 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(4)} >4</button>}
+        {dataCount > 33804 && <button className={tablePage===5 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(5)} >5</button>}
       </div>
       {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} totalFilter={totalSearch} />}
       {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} rawCols={rawCols} />}

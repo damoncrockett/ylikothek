@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useLayoutEffect, useRef, createRef } from 'react';
+import React, { Component, useState, useEffect, useRef, createRef } from 'react';
 import { data } from './data';
 import { dataraw } from './raw';
 
@@ -84,34 +84,9 @@ function allbool(iterable) {
     return true;
 }
 
-function CountModal({ countModal, countCol, filterList, totalFilter }) {
+function CountModal({ processedData, countModal, countCol }) {
 
   const [azSort,setAzSort] = useState(false);
-  let processedData = [...data];
-
-  if ( totalFilter !== '' ) {
-    const totalFilterIdxs = [];
-    dataraw.forEach((item, i) => {
-      if ( anybool(item.map(d => d.toLowerCase().includes(totalFilter.toLowerCase()))) ) {
-        totalFilterIdxs.push(i.toString());
-      }
-    });
-    processedData = processedData.filter(d => totalFilterIdxs.includes(d[9]));
-  }
-
-  filterList.forEach((item, i) => {
-    if ( item !== '' ) {
-      if ( item.includes('&') ) {
-        const items = item.split('&');
-        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else if ( item.includes('|') ) {
-        const items = item.split('|');
-        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else {
-        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
-      }
-    }
-  });
 
   const countObject = valueCounts(processedData.map(d => d[countCol]));
   let countArrays = [];
@@ -157,42 +132,7 @@ function FormatCountModal({ ct, val }) {
   )
 }
 
-function TableCells({ sortCol, asc, filterList, totalFilter, setRawModal, setRawRow, setRawCols, tablePage, setDataCount }) {
-
-  let processedData = [...data];
-
-  if ( totalFilter !== '' ) {
-    const totalFilterIdxs = [];
-    dataraw.forEach((item, i) => {
-      if ( anybool(item.map(d => d.toLowerCase().includes(totalFilter.toLowerCase()))) ) {
-        totalFilterIdxs.push(i.toString());
-      }
-    });
-
-    processedData = processedData.filter(d => totalFilterIdxs.includes(d[9]));
-  }
-
-  filterList.forEach((item, i) => {
-    if ( item !== '' ) {
-      if ( item.includes('&') ) {
-        const items = item.split('&');
-        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else if ( item.includes('|') ) {
-        const items = item.split('|');
-        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else {
-        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
-      }
-    }
-  });
-
-  setDataCount(processedData.length);
-
-  if ( asc === true ) {
-    processedData = processedData.sort((a,b) => a[cols.indexOf(sortCol)].localeCompare(b[cols.indexOf(sortCol)]));
-  } else if ( asc === false ) {
-    processedData = processedData.sort((a,b) => b[cols.indexOf(sortCol)].localeCompare(a[cols.indexOf(sortCol)]));
-  }
+function TableCells({ processedData, setRawModal, setRawRow, setRawCols, tablePage }) {
 
   return (
     <tbody id='tbody'>
@@ -229,6 +169,7 @@ export default function App() {
   const [asc, setAsc] = useState(true);
   const [searchTerms, setSearchTerms] = useState(new Array(cols.length).fill(''));
   const [totalSearch, setTotalSearch] = useState('');
+  const [totalSearchIdxs,setTotalSearchIdxs] = useState([]);
   const totalRef = useRef();
   const fieldsRef = useRef(cols.map(() => createRef()));
   const [countModal, setCountModal] = useState(false);
@@ -238,11 +179,44 @@ export default function App() {
   const [rawCols,setRawCols] = useState(null);
   const [loading,setLoading] = useState(true);
   const [tablePage,setTablePage] = useState(1);
-  const [dataCount,setDataCount] = useState(42254);
 
   setTimeout(() => {
     setLoading(false);
   }, 10000)
+
+  let processedData = [...data];
+
+  useEffect(() => {
+    const newTotalSearchIdxs = [];
+    dataraw.forEach((item, i) => {
+      if ( anybool(item.map(d => d.toLowerCase().includes(totalSearch.toLowerCase()))) ) {
+        newTotalSearchIdxs.push(i.toString());
+      }
+    });
+    setTotalSearchIdxs(newTotalSearchIdxs);
+  },[totalSearch])
+
+  processedData = processedData.filter(d => totalSearchIdxs.includes(d[9]));
+
+  searchTerms.forEach((item, i) => {
+    if ( item !== '' ) {
+      if ( item.includes('&') ) {
+        const items = item.split('&');
+        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
+      } else if ( item.includes('|') ) {
+        const items = item.split('|');
+        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
+      } else {
+        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+      }
+    }
+  });
+
+  if ( asc === true ) {
+    processedData = processedData.sort((a,b) => a[cols.indexOf(sortCol)].localeCompare(b[cols.indexOf(sortCol)]));
+  } else if ( asc === false ) {
+    processedData = processedData.sort((a,b) => b[cols.indexOf(sortCol)].localeCompare(a[cols.indexOf(sortCol)]));
+  }
 
   return (
     <div id='app'>
@@ -272,17 +246,17 @@ export default function App() {
               {cols.map((c,i) => <th key={i} id={'c'+i} className='colLabel'><button id={'b'+i} onClick={() => {setCountModal(countCol===i ? false : true);setCountCol(countCol===i ? '' : i)}}>{c}</button></th>)}
             </tr>
           </thead>
-          <TableCells sortCol={sortCol} asc={asc} filterList={searchTerms} totalFilter={totalSearch} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} tablePage={tablePage} setDataCount={setDataCount} />
+          <TableCells processedData={processedData} setRawModal={setRawModal} setRawRow={setRawRow} setRawCols={setRawCols} tablePage={tablePage} />
         </table>
       </div>
       <div id='pageButtons'>
-        {dataCount > 8451 && <button className={tablePage===1 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(1)} >1</button>}
-        {dataCount > 8451 && <button className={tablePage===2 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(2)} >2</button>}
-        {dataCount > 16902 && <button className={tablePage===3 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(3)} >3</button>}
-        {dataCount > 25353 && <button className={tablePage===4 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(4)} >4</button>}
-        {dataCount > 33804 && <button className={tablePage===5 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(5)} >5</button>}
+        {<button className={tablePage===1 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(1)} >1</button>}
+        {<button className={tablePage===2 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(2)} >2</button>}
+        {<button className={tablePage===3 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(3)} >3</button>}
+        {<button className={tablePage===4 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(4)} >4</button>}
+        {<button className={tablePage===5 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(5)} >5</button>}
       </div>
-      {countModal && <CountModal countModal={countModal} countCol={countCol} filterList={searchTerms} totalFilter={totalSearch} />}
+      {countModal && <CountModal processedData={processedData} countModal={countModal} countCol={countCol} />}
       {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} rawCols={rawCols} />}
     </div>
   )

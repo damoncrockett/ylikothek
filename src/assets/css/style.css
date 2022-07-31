@@ -127,13 +127,31 @@
 #totalSearch {
   display: inline-block;
   position: fixed;
-  top: 4vh;
+  top: 3vh;
   left: 50%;
   transform: translateX(-50%);
 }
 
-#totalSearch input {
+#totalSearchField {
   width: 20vw;
+}
+
+#totalSearchButton {
+  display: inline-block;
+  margin: 1vw;
+  background-color: #bd5139;
+  color: white;
+  font-family: 'Yantramanav';
+  border: 1px solid white;
+  border-radius: 0.5vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+}
+
+#totalSearchButton:hover {
+  border-color: dimgrey;
 }
 
 #viewpane {

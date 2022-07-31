@@ -35,7 +35,8 @@ module.exports = {
         use: {
           loader: 'buble-loader',
           options: {
-            objectAssign: 'Object.assign'
+            objectAssign: 'Object.assign',
+            transforms: { forOf: false }
           }
         },
       },

@@ -167,50 +167,74 @@ export default function App() {
 
   const [sortCol, setSortCol] = useState('INSTITUTION');
   const [asc, setAsc] = useState(true);
+
   const [searchTerms, setSearchTerms] = useState(new Array(cols.length).fill(''));
-  const [totalSearch, setTotalSearch] = useState('');
+  const [columnSearchIdxs,setColumnSearchIdxs] = useState([]);
   const [totalSearchIdxs,setTotalSearchIdxs] = useState([]);
+  const [totalSearch, setTotalSearch] = useState('');
   const totalRef = useRef();
   const fieldsRef = useRef(cols.map(() => createRef()));
+
   const [countModal, setCountModal] = useState(false);
   const [countCol, setCountCol] = useState('');
-  const [rawModal,setRawModal] = useState(false);
-  const [rawRow,setRawRow] = useState(null);
-  const [rawCols,setRawCols] = useState(null);
-  const [loading,setLoading] = useState(true);
-  const [tablePage,setTablePage] = useState(1);
+
+  const [rawModal, setRawModal] = useState(false);
+  const [rawRow, setRawRow] = useState(null);
+  const [rawCols, setRawCols] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+  const [tablePage, setTablePage] = useState(1);
 
   setTimeout(() => {
     setLoading(false);
   }, 10000)
 
-  let processedData = [...data];
-
   useEffect(() => {
-    const newTotalSearchIdxs = [];
-    dataraw.forEach((item, i) => {
-      if ( anybool(item.map(d => d.toLowerCase().includes(totalSearch.toLowerCase()))) ) {
-        newTotalSearchIdxs.push(i.toString());
-      }
-    });
-    setTotalSearchIdxs(newTotalSearchIdxs);
+    const tmp = [];
+    if ( totalSearch !== '' ) {
+      dataraw.forEach((item, i) => {
+        if ( !anybool(item.map(d => d.toLowerCase().includes(totalSearch.toLowerCase()))) ) {
+          tmp.push(i);
+        }
+      });
+    }
+    setTotalSearchIdxs(tmp);
   },[totalSearch])
 
-  processedData = processedData.filter(d => totalSearchIdxs.includes(d[9]));
-
-  searchTerms.forEach((item, i) => {
-    if ( item !== '' ) {
-      if ( item.includes('&') ) {
-        const items = item.split('&');
-        processedData = processedData.filter(d => allbool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else if ( item.includes('|') ) {
-        const items = item.split('|');
-        processedData = processedData.filter(d => anybool(items.map(s => d[i].toLowerCase().includes(s.toLowerCase()))) )
-      } else {
-        processedData = processedData.filter(d => d[i].toLowerCase().includes(item.toLowerCase()))
+  useEffect(() => {
+    const tmp = [];
+    for ( const [i, item] of data.entries() ) {
+      for ( const [k, j] of item.slice(0,9).entries() ) {
+        const searchEntry = searchTerms[k];
+        if ( searchEntry !== '' ) {
+          if ( searchEntry.includes('&') ) {
+            const conjuncts = searchEntry.split('&');
+            if ( !allbool(conjuncts.map(c => j.toLowerCase().includes(c.toLowerCase()))) ) {
+              tmp.push(i);
+              break;
+            }
+          } else if ( searchEntry.includes('|') ) {
+            const disjuncts = searchEntry.split('|');
+            if ( !anybool(disjuncts.map(d => j.toLowerCase().includes(d.toLowerCase()))) ) {
+              tmp.push(i);
+              break;
+            }
+          } else {
+            if ( !j.toLowerCase().includes(searchEntry.toLowerCase()) ) {
+              tmp.push(i);
+              break;
+            }
+          }
+        }
       }
     }
-  });
+    setColumnSearchIdxs(tmp);
+  },[searchTerms])
+
+  const idxsToRemove = new Set(columnSearchIdxs.concat(totalSearchIdxs));
+  const dataRange = Array.from(Array(data.length).keys());
+  const idxsToKeep = dataRange.filter(el => !idxsToRemove.has(el)); // this helped a lot!
+  let processedData = idxsToKeep.map(i => data[i]);
 
   if ( asc === true ) {
     processedData = processedData.sort((a,b) => a[cols.indexOf(sortCol)].localeCompare(b[cols.indexOf(sortCol)]));
@@ -231,7 +255,7 @@ export default function App() {
       </div>
       <div id='banner'>
         <span id='title'>ioma</span>
-        <form id="totalSearch" onSubmit={e => {e.preventDefault();setTotalSearch(totalRef.current.value)}}><input ref={totalRef} type="text" /></form>
+        <form id="totalSearch" onSubmit={e => {e.preventDefault();setTotalSearch(totalRef.current.value)}}><input ref={totalRef} type="text" id='totalSearchField' /><input type="submit" value="SEARCH ALL FIELDS" id="totalSearchButton"/></form>
       </div>
       <div id='viewpane'>
         <table id='tabular'>
@@ -250,11 +274,11 @@ export default function App() {
         </table>
       </div>
       <div id='pageButtons'>
-        {<button className={tablePage===1 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(1)} >1</button>}
-        {<button className={tablePage===2 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(2)} >2</button>}
-        {<button className={tablePage===3 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(3)} >3</button>}
-        {<button className={tablePage===4 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(4)} >4</button>}
-        {<button className={tablePage===5 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(5)} >5</button>}
+        {processedData.length > 8451 && <button className={tablePage===1 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(1)} >1</button>}
+        {processedData.length > 8451 && <button className={tablePage===2 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(2)} >2</button>}
+        {processedData.length > 16902 && <button className={tablePage===3 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(3)} >3</button>}
+        {processedData.length > 25353 && <button className={tablePage===4 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(4)} >4</button>}
+        {processedData.length > 33804 && <button className={tablePage===5 ? 'pageButton active' : 'pageButton'} onClick={() => setTablePage(5)} >5</button>}
       </div>
       {countModal && <CountModal processedData={processedData} countModal={countModal} countCol={countCol} />}
       {rawModal && <RawModal rawRow={rawRow} setRawModal={setRawModal} rawCols={rawCols} />}

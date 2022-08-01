@@ -71,6 +71,18 @@
   margin-bottom: 2vh;
 }
 
+#rawModalSiblingAbove {
+  position: sticky;
+  top: 0;
+  margin-bottom: 2vh;
+}
+
+#rawModalSiblingBelow {
+  position: sticky;
+  top: 0;
+  margin-bottom: 2vh;
+}
+
 .rawButton {
   margin-right: 1vw;
 }

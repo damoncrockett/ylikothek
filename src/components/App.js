@@ -157,11 +157,9 @@ const FormatRaw = ({ cat, val }) => {
 function RawModal({ rawRow, setRawModal, rawCols, clickedId, setClickedId }) {
   return (
     <div id='rawModal'>
-      <div id='rawButtons'>
-        <button id='rawModalClose' className='material-icons rawButton' onClick={()=>{setRawModal(false);setClickedId(null)}}>close</button>
-        <button id='rawModalSiblingAbove' className='material-icons rawButton' onClick={()=>{document.getElementById(document.getElementById(clickedId).previousSibling.id).click()}}>arrow_upward</button>
-        <button id='rawModalSiblingBelow' className='material-icons rawButton' onClick={()=>{document.getElementById(document.getElementById(clickedId).nextSibling.id).click()}}>arrow_downward</button>
-      </div>
+      <button id='rawModalClose' className='material-icons rawButton' onClick={()=>{setRawModal(false);setClickedId(null)}}>close</button>
+      <button id='rawModalSiblingAbove' className='material-icons rawButton' onClick={()=>{document.getElementById(document.getElementById(clickedId).previousSibling.id).click()}}>arrow_upward</button>
+      <button id='rawModalSiblingBelow' className='material-icons rawButton' onClick={()=>{document.getElementById(document.getElementById(clickedId).nextSibling.id).click()}}>arrow_downward</button>
       {rawRow.map((r,i) => <div className='rawCell' key={i}>{<FormatRaw cat={rawCols[i]} val={r} />}</div>)}
     </div>
   )
@@ -192,9 +190,21 @@ export default function App() {
   useEffect(() => {
     const tmp = [];
     if ( totalSearch !== '' ) {
-      dataraw.forEach((item, i) => {
-        if ( !anybool(item.map(d => d.toLowerCase().includes(totalSearch.toLowerCase()))) ) {
-          tmp.push(i);
+      dataraw.forEach((row, i) => {
+        if ( totalSearch.includes('&') ) {
+          const conjuncts = totalSearch.split('&');
+          if ( !anybool(row.map(cell => allbool(conjuncts.map(c => cell.toLowerCase().includes(c.toLowerCase()))))) ) {
+            tmp.push(i);
+          }
+        } else if ( totalSearch.includes('|') ) {
+          const disjuncts = totalSearch.split('|');
+          if ( !anybool(row.map(cell => anybool(disjuncts.map(d => cell.toLowerCase().includes(d.toLowerCase()))))) ) {
+            tmp.push(i);
+          }
+        } else {
+          if ( !anybool(row.map(cell => cell.toLowerCase().includes(totalSearch.toLowerCase()))) ) {
+            tmp.push(i);
+          }
         }
       });
     }

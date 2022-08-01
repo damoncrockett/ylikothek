@@ -265,7 +265,7 @@ export default function App() {
       </div>
       <div id='banner'>
         <span id='title'>ioma</span>
-        <form id="totalSearch" onSubmit={e => {e.preventDefault();setTotalSearch(totalRef.current.value)}}><input ref={totalRef} type="text" id='totalSearchField' /><input type="submit" value="SEARCH ALL FIELDS" id="totalSearchButton"/></form>
+        <form id="totalSearch" onSubmit={e => {e.preventDefault();setTotalSearch(totalRef.current.value)}}><input ref={totalRef} type="text" id='totalSearchField' /><input type="submit" value="SEARCH RAW FIELDS" id="totalSearchButton"/></form>
       </div>
       <div id='viewpane'>
         <table id='tabular'>

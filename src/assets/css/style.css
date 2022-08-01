@@ -2,53 +2,20 @@
 
 }
 
-#loadingScreen {
-  width: 100vw;
-  height: 100vh;
-  background-color: whitesmoke;
-  z-index: 10;
-  position: relative;
-}
-
-#loadingMsg {
+#clickIdButton {
+  color: #bd5139;
+  border: 1px solid #bd5139;
+  background-color: transparent;
+  border-radius: 0.5vh;
   position: fixed;
-  top: 14vh;
-  left: 50%;
-  transform: translateX(-50%);
-  color: dimgrey;
+  right: 0;
+  top: 54vh;
+  margin-right: 1.5vw;
 }
 
-#loadingSubtitle {
-  font-family: sans-serif;
-  font-size: 3vh;
-  text-align: center;
-}
-
-#loadingTitle {
-  font-family: sans-serif;
-  font-size: 6vh;
-  text-align: center;
-  margin: 0;
-}
-
-.loader {
-  margin: auto;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  border: 20px solid gainsboro;
-  border-radius: 50%;
-  border-top: 20px solid rgba(0, 53, 107, .82);
-  width: 10vw;
-  height: 10vw;
-  animation: spinner 4s linear infinite;
-}
-
-@keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+#clickIdButton:hover {
+  background-color: #bd5139;
+  color: white;
 }
 
 #scrollers {

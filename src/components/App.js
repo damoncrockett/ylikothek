@@ -187,7 +187,6 @@ export default function App() {
   const [rawCols, setRawCols] = useState(null);
 
   const [clickedId,setClickedId] = useState(null);
-
   const [tablePage, setTablePage] = useState(1);
 
   useEffect(() => {
@@ -245,6 +244,7 @@ export default function App() {
 
   return (
     <div id='app'>
+      {clickedId !== null && <button id='clickIdButton' onClick={() => document.getElementById(clickedId).scrollIntoView({block: "center"})} >&mdash;</button>}
       <div id='scrollers'>
         <button id='top' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,0)}>vertical_align_top</button>
         <button id='uup' className='material-icons' onClick={() => document.getElementById("viewpane").scrollTo(0,document.getElementById("viewpane").scrollTop - document.getElementById("tabular").getBoundingClientRect().height / 10)}>keyboard_double_arrow_up</button>

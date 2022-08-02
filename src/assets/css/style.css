@@ -2,6 +2,10 @@
 
 }
 
+table {
+  font-size: 2vh;
+}
+
 #clickIdButton {
   color: #bd5139;
   border: 1px solid #bd5139;
@@ -11,6 +15,7 @@
   right: 0;
   top: 54vh;
   margin-right: 1.5vw;
+  font-size: 2vh;
 }
 
 #clickIdButton:hover {
@@ -43,7 +48,7 @@
   color: dimgrey;
   font-weight: 100;
   font-family: "Yantramanav";
-  font-size: 2vh;
+  font-size: 2.5vh;
   padding: 4vh;
 }
 
@@ -104,33 +109,36 @@
 }
 
 #totalSearch {
-  display: inline-block;
   position: fixed;
-  top: 3vh;
+  top: 4vh;
   left: 50%;
   transform: translateX(-50%);
 }
 
 #totalSearchField {
   width: 20vw;
+  font-size: 2vh;
+  margin-right: 1vw;
+  float: left;
+  margin-top: 1px;
 }
 
 #totalSearchButton {
-  display: inline-block;
-  margin: 1vw;
   background-color: #bd5139;
+  border: 1px solid white;
   color: white;
   font-family: 'Yantramanav';
-  border: 1px solid white;
+  font-size: 1.5vh;
   border-radius: 0.5vh;
   padding-top: 0.5vh;
   padding-bottom: 0.5vh;
   padding-left: 1vh;
   padding-right: 1vh;
+  float: left;
 }
 
 #totalSearchButton:hover {
-  border-color: dimgrey;
+  border: 1px solid dimgrey;
 }
 
 #viewpane {
@@ -175,7 +183,7 @@ th {
 .colLabel button {
   font-family: "Yantramanav";
   font-weight: 400;
-  font-size: 1vw;
+  font-size: 1.125vw;
 }
 
 #countModal {
@@ -236,6 +244,7 @@ th {
   position: sticky;
   top: 0vh;
   width: 7vw;
+  font-size: 2vh;
 }
 
 td {
@@ -262,7 +271,7 @@ td {
   font-family: 'Material Icons' !important;
   font-weight: normal;
   font-style: normal;
-  font-size: 1.5vh;
+  font-size: 2vh;
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -315,6 +324,7 @@ button:hover {
   background-color: transparent;
   color: gainsboro;
   font-family: 'Yantramanav';
+  font-size: 2vh;
   border: 1px solid gainsboro;
 }
 

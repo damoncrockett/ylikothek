@@ -2,6 +2,8 @@ import React, { Component, useState, useEffect, useRef, createRef } from 'react'
 import { data } from './data';
 import { dataraw } from './raw';
 
+// 1671x968
+
 const cols = ['INSTITUTION','INDEX','NAME','TYPE','YEAR','ORIGIN','MANUFACTURER','COLOR','ANALYSIS'];
 
 const gettycols = ['Common Name','Additional Names','Sample Type','Typical Use',
